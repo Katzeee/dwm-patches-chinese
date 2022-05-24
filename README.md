@@ -15,6 +15,5 @@ The Chinese translation of DWM patches / DWM补丁的中文翻译
 - focus：目前可以进行操作的client就是被focus的，也就是聚焦。
 - vaccant：空闲的，一个没有client的tag就是一个vaccant tag。
 - tary：系统托盘，最小化的图标显示的位置。
-- master：新创建的client会被放在左边也就使master的位置。
 - layout：窗口布局，默认有三种tile`[]=`，floating`><>`，monocle`[M]`
 - master：新创建的client会被放在左边也就是master的位置。
