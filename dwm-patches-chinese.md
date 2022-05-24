@@ -970,3 +970,92 @@ https://dwm.suckless.org/patches/combo/
 - 使用方法
 
   按住MODKEY并同时按住1、3可以同时查看1、3tag中的内容。
+
+## cool autostart
+
+https://dwm.suckless.org/patches/cool_autostart/
+
+- 功能简介
+
+  使dwm执行一些命令，并在退出dwm之后关闭由该该命令所产生的所有进程。（可以用其打开vpn之类的软件）
+
+- 使用方法
+
+  ```diff
+  +static const char *const autostart[] = {
+  +	"st", NULL,
+  +	NULL /* terminate */
+  +};
+  +
+  ```
+  在autostart数组中写入需要执行的命令，每条命令以NULL结尾，所有命令之后也以NULL结尾。
+
+## cropwindows
+
+https://dwm.suckless.org/patches/cropwindows/
+
+- 功能简介
+
+  创建现有窗口的裁剪视图，只显示其中的一部分，通常是为了从框架不好的视频或程序和设计糟糕的网站中回收屏幕空间。
+
+- 使用方法
+
+  ```diff
+  +{ ClkClientWin, MODKEY|ShiftMask, Button1, movemouse,   {.i = 1} },
+  +{ ClkClientWin, MODKEY|ShiftMask, Button3, resizemouse, {.i = 1} },
+  ```
+  MODKEY+SHIFT+鼠标左键可以创建一个裁剪窗口，MODKEY+SHIFT+鼠标右键可以移动该窗口里的内容。
+
+## current_desktop
+
+https://dwm.suckless.org/patches/current_desktop/
+
+- 功能简介
+
+  将root上的_NET_NUMBER_OF_DESKTOPS和_NET_CURRENT_DESKTOP设置为适当的值。请注意，这些值的“适当”作为`xprop -root`输出没有意义，因为dwm按位使用它们，但xprop以十进制显示它们。如果您选择了桌面1和3，则值为0b1010，但xprop将其显示为10。作者提到他有一个脚本使用了该特性，我理解这样可以同时将多个桌面（DESKTOP）作为一个桌面进行处理。
+
+- 使用方法
+
+  直接使用
+
+## cursorwarp
+
+https://dwm.suckless.org/patches/cursorwarp/
+
+- 功能简介
+
+  使切换focus或monitor的时候将鼠标移至屏幕中间。
+
+- 使用方法
+
+  直接使用
+
+  dwm-cursorwarp-20210222-61bb8b2.diff为默认版本。
+
+  dwm-cursorwarp-mononly-20210222-61bb8b2.diff仅在更换显示器时移动鼠标。
+
+  dwm-cursorwarp-stackonly-20210222-61bb8b2.diff仅在切换focus窗口时。
+
+## cyclelayouts
+
+https://dwm.suckless.org/patches/cyclelayouts/
+
+- 功能简介
+
+  提供快捷键循环窗口layout，dwm默认只可以在两个layout之间来回换。
+
+- 使用方法
+
+  ```diff
+  @@ -41,6 +41,7 @@ static const Layout layouts[] = {
+ 	{ "[]=",      tile },    /* first entry is default */
+ 	{ "><>",      NULL },    /* no layout function means floating behavior */
+ 	{ "[M]",      monocle },
+  +	{ NULL,       NULL },
+  };
+
+  +	{ MODKEY|ControlMask,		XK_comma,  cyclelayout,    {.i = -1 } },
+  +	{ MODKEY|ControlMask,   XK_period, cyclelayout,    {.i = +1 } },
+  ```
+  最后一个布局需要设置为NULL, NULL，使用提供的快捷键可以在布局之间循环。
+
