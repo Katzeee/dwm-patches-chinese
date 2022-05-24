@@ -567,4 +567,406 @@ https://dwm.suckless.org/patches/bottomstack/
 
   bstack [Alt]+[u], bstackhoriz [Alt]+[o]。
 
-## 
+## canfocusfloating
+
+https://dwm.suckless.org/patches/canfocusfloating/
+
+- 功能简介
+
+  可选择是否focus到floating client上，如开启则所有floating client将被跳过（MODKEY+j/k）无法focus。
+
+- 使用方法
+
+  ```diff
+  +  { MODKEY,                       XK_s,      togglecanfocusfloating,   {0} },
+  ```
+  使用togglecanfocusfloating开启/关闭该功能。
+
+## canfocusrule
+
+https://dwm.suckless.org/patches/canfocusrule/
+
+- 功能简介
+
+  为某窗口设置rule使其永远无法被focus，对tray可能一类的软件可能很实用。
+
+- 使用方法
+
+  ```diff
+  @@ -26,9 +26,9 @@ static const Rule rules[] = {
+ 	 *	WM_CLASS(STRING) = instance, class
+ 	 *	WM_NAME(STRING) = title
+ 	 */
+  -	/* class      instance    title       tags mask     isfloating   monitor */
+  -	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+  -	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+  +	/* class      instance    title       tags mask     isfloating canfocus   monitor */
+  +	{ "Gimp",     NULL,       NULL,       0,            1,         1,         -1 },
+  +	{ "Firefox",  NULL,       NULL,       1 << 8,       0,         1,         -1 },
+  };
+  ```
+  更改rule数组，canfocus为0表示不可focus。
+
+## center
+
+https://dwm.suckless.org/patches/center/
+
+- 功能简介
+
+  为某窗口设置rule使其永远居中。
+
+- 使用方法
+
+  ```diff
+  @@ -26,9 +26,9 @@ static const Rule rules[] = {
+  *	WM_CLASS(STRING) = instance, class
+  *	WM_NAME(STRING) = title
+  */
+  -	/* class      instance    title       tags mask     isfloating   monitor */
+  -	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+  -	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+  +	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
+  +	{ "Gimp",     NULL,       NULL,       0,            0,           1,           -1 },
+  +	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           -1 },
+  };
+  ```
+  更改rule数组，在iscentered的位置给1表示居中。
+
+## center first window
+
+https://dwm.suckless.org/patches/center_first_window/
+
+- 功能简介
+
+  若整个tag内只有一个client则将其center，可通过rule设置哪个窗口被center。
+  ```
+  +-----------------------------+         +-----------------------------+
+  |                             |         | +------------+ +----------+ |
+  |                             |         | |            | |          | |
+  |                             |         | |            | |          | |
+  |       +-------------+       |         | |            | |          | |
+  |       |    Single   |       |         | |  Terminal  | | Terminal | |
+  |       |   Terminal  |       |         | |  Window 1  | | Window 2 | |
+  |       |    Window   |       |         | |            | |          | |
+  |       +-------------+       |         | |            | |          | |
+  |                             |         | |            | |          | |
+  |                             |         | |            | |          | |
+  |                             |         | +------------+ +----------+ |
+  +-----------------------------+         +-----------------------------+
+  ```
+  适用于很大的屏幕，一个terminal可能需要看到屏幕的左上角很不方便。
+
+- 使用方法
+
+  ```diff
+  @@ -26,9 +26,10 @@ static const Rule rules[] = {
+ 	 *	WM_CLASS(STRING) = instance, class
+ 	 *	WM_NAME(STRING) = title
+ 	 */
+  -	/* class      instance    title       tags mask     isfloating   monitor */
+  -	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+  -	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+  +	/* class      	     instance    title    tags mask     isfloating   CenterThisWindow?     monitor */
+  +	{ "st",              NULL,       NULL,    0,            0,     	     1,		           -1 },
+  +	{ "Gimp",            NULL,       NULL,    0,            1,           0,                    -1 },
+  +	{ "Firefox",         NULL,       NULL,    1 << 8,       0,           0,                    -1 },
+  };
+  ```
+  更改rule数组，CenterThisWindow表示该client启用此patch的功能。
+
+## centeredmaster
+
+https://dwm.suckless.org/patches/centeredmaster/
+
+- 功能简介
+
+  增加了两种布局centeredmaster，centeredfloatingmaster。效果如下
+  ```
+  centeredmaster
+  +------------------------------+       +------------------------------+
+  |+--------++--------++--------+|       |+--------++--------++--------+|
+  ||        ||        ||        ||       ||        ||        ||        ||
+  ||        ||        ||        ||       ||        ||   M1   ||        ||
+  ||        ||        ||        ||       ||        ||        ||        ||
+  ||  S2    ||   M    ||   S1   ||       ||        |+--------+|        ||
+  ||        ||        ||        ||       ||        |+--------+|        ||
+  ||        ||        ||        ||       ||        ||        ||        ||
+  ||        ||        ||        ||       ||        ||   M2   ||        ||
+  ||        ||        ||        ||       ||        ||        ||        ||
+  |+--------++--------++--------+|       |+--------++--------++--------+|
+  +------------------------------+       +------------------------------+
+  centeredfloatingmaster（仅master窗口浮动在中央）
+  +------------------------------+       +------------------------------+
+  |+--------++--------++--------+|       |+--------++--------++--------+|
+  ||        ||        ||        ||       ||        ||        ||        ||
+  ||    +------------------+    ||       ||    +--------++--------+    ||
+  ||    |                  |    ||       ||    |        ||        |    ||
+  ||    |                  |    ||       ||    |        ||        |    ||
+  ||    |        M         |    ||       ||    |   M1   ||   M2   |    ||
+  ||    |                  |    ||       ||    |        ||        |    ||
+  ||    +------------------+    ||       ||    +--------++--------+    ||
+  ||        ||        ||        ||       ||        ||        ||        ||
+  |+--------++--------++--------+|       |+--------++--------++--------+|
+  +------------------------------+       +------------------------------+
+  ```
+  
+- 使用方法
+
+  ```diff
+  @@ -39,6 +39,8 @@ static const Layout layouts[] = {
+ 	{ "[]=",      tile },    /* first entry is default */
+ 	{ "><>",      NULL },    /* no layout function means floating behavior */
+ 	{ "[M]",      monocle },
+  +	{ "|M|",      centeredmaster },
+  +	{ ">M>",      centeredfloatingmaster },
+  };
+
+  +	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} },
+  +	{ MODKEY,                       XK_o,      setlayout,      {.v = &layouts[4]} },
+  ```
+  通过快捷键切换布局。
+  
+## centeredwindowname
+
+https://dwm.suckless.org/patches/centeredwindowname/
+
+- 功能介绍
+
+  将client的名称居中显示而不是靠在显示在bar上。
+
+- 使用方法
+
+  直接使用
+
+## centertitle
+
+https://dwm.suckless.org/patches/centretitle/
+
+- 功能介绍
+
+  将client的名称居中显示而不是靠在显示在bar上。与上面的补丁功能类似，区别不明，未测试。
+
+- 使用方法
+
+  直接使用
+
+## cfacts
+
+https://dwm.suckless.org/patches/cfacts/
+
+- 功能介绍
+
+  可以调整client的高度（默认只能左右）
+  ```
+  +---------------------+
+  |          |   0.5    |
+  |   1.0    +----------+
+  +----------+          |
+  |          |   1.0    |
+  |          +----------+
+  |   2.0    |          |
+  |          |   1.0    |
+  +----------+----------+
+  ```
+
+  还提供了三种基于cfacts的layout。bottomstack，centeredmaster和deck。
+
+- 使用方法
+
+  ```diff
+  +	{ MODKEY|ShiftMask,             XK_h,      setcfact,       {.f = +0.25} },
+  +	{ MODKEY|ShiftMask,             XK_l,      setcfact,       {.f = -0.25} },
+  +	{ MODKEY|ShiftMask,             XK_o,      setcfact,       {.f =  0.00} },
+  ```
+  从上到下依次是变高，变低，复原。
+
+## clientindicators
+
+https://dwm.suckless.org/patches/clientindicators/
+
+- 功能简介
+
+  原始的dwm只有小矩形指示该tag是否有client，该patch可以显示client的数量。
+
+  dwm-clientindicators-6.2.diff 为该补丁
+
+  dwm-clientindicatorshidevacant-6.2.diff 为该补丁+hidevacant补丁
+
+- 使用方法
+
+  直接使用
+  
+## clientmonoclesymbol
+
+https://dwm.suckless.org/patches/clientmonoclesymbol/
+
+- 功能简介
+
+  将monocle layout的client数量指示标改为自定义的图标，即`[1]`，`[2]`之类的可自定义。
+
+- 使用方法
+
+  ```diff
+  +/* 当clients数量大于设置的图标数量时，使用最后一个 */
+  +static const char *monocles[] = { "[1]", "[2]", "[3]", "[4]", "[5]", "[6]", "[7]", "[8]", "[9]", "[9+]" };
+  ```
+  设置monocles数组以改变图标。
+
+## clientopacity
+
+https://dwm.suckless.org/patches/clientopacity/
+
+- 功能简介
+
+  可以更改client的透明度。
+
+- 使用方法
+
+  ```diff
+  +static const double defaultopacity  = 0.75; // 默认透明度
+
+  @@ -26,9 +27,10 @@ static const Rule rules[] = {
+ 	*	WM_CLASS(STRING) = instance, class
+ 	*	WM_NAME(STRING) = title
+ 	*/
+  -	/* class      instance    title       tags mask     isfloating   monitor */
+  -	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+  -	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+  +	/* class      instance    title       tags mask     isfloating	 opacity	monitor */
+  +	{ "Gimp",     NULL,       NULL,       0,            1,           1.0,		-1 },
+  +	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           1.0,		-1 },
+  +	{ "St",	      NULL,       NULL,       0,            0,           defaultopacity, -1},
+
+  +	{ MODKEY|ShiftMask,		XK_KP_Add, changeopacity,	{.f = +0.1}},
+  +	{ MODKEY|ShiftMask,		XK_KP_Subtract, changeopacity,  {.f = -0.1}},
+  ```
+  defaultopacity为默认透明度，可以通过rule给窗口单独设置透明度，通过快捷键也可调整focus窗口的透明度。
+
+## clients per tag
+
+https://dwm.suckless.org/patches/clientspertag/
+
+- 功能简介
+
+  可以设置一个tag中最多可以看见的client数量，多余的会和monocle一样被压在下面，也可理解为monocle布局，但是一层可以有多个client。（该patch最新版本时2009年的，不知是否还可使用）
+
+  ```
+  +-----------------------+  +-----------------------+
+  | -1/3                  |  |  2/3                  |
+  +-----------+-----------+  +-----------+-----------+
+  |           |           |  |           |           |
+  |           |     2     |  |           |           |
+  |           |           |  |           |           |
+  |     1     +-----------+  |     1     |     2     |
+  |           |           |  |           |           |
+  |           |     3     |  |           |           |
+  |           |           |  |           |           |
+  +-----------+-----------+  +-----------+-----------+
+            cpt=-1                     cpt=2
+  ```
+
+- 使用方法
+
+  ```diff
+  +static int cpt = -1; //-1显示所有client，0只显示floating client，其他为显示个数
+
+  static Key keys[] = {
+	/* modifier      key        function        argument */
+	...
+	+ { MODKEY,        XK_q,      clientspertag,  {.v="2"} },
+	+ { MODKEY,        XK_a,      clientspertag,  {.v="^3"} },
+  };
+  ```
+  .v=2表示给cpt赋值为2，^3表示将cpt的值在3和-1之间切换，即按一次cpt为3，再按一次就切换回-1。
+
+## cmdcustomize(customise dwm through command line)
+
+https://dwm.suckless.org/patches/cmdcustomize/
+
+- 功能简介
+
+  dwm默认只能从config.h中设置主题颜色，每次设置完需要重新编译，该补丁可以在启动dwm时使用命令行参数设置颜色。
+
+- 使用方法
+
+  - fn：dwm字体
+  - df：dmenu字体
+  - nb：普通背景颜色
+  - nf：普通前景颜色
+  - sb：选中背景颜色 
+  - sf：选中前景颜色
+  - dnb：dmenu普通背景颜色 
+  - dnf：dmenu普通前景颜色
+  - dsb：dmenu选中背景颜色
+  - dsf：dmenu选中前景颜色
+
+## colemak_keys
+
+https://dwm.suckless.org/patches/colemak_keys/
+
+- 功能简介
+
+  将原快捷键布局改为符合colemak键盘布局的快捷键键位。
+
+- 使用方法
+  
+  直接使用
+
+## colorbar
+
+https://dwm.suckless.org/patches/colorbar/
+
+- 功能简介
+
+  可以自定义bar的各部件的颜色。
+
+- 使用方法
+
+  ```diff
+  [SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+  +	[SchemeStatus]  = { col_gray3, col_gray1,  "#000000"  }, // Statusbar right {文本，背景，未使用但不能为空}
+  +	[SchemeTagsSel]  = { col_gray4, col_cyan,  "#000000"  }, // Tagbar left 选中 {文本，背景，未使用但不能为空}
+  +    [SchemeTagsNorm]  = { col_gray3, col_gray1,  "#000000"  }, // Tagbar left 未选中 {文本，背景，未使用但不能为空}
+  +    [SchemeInfoSel]  = { col_gray4, col_cyan,  "#000000"  }, // infobar middle  选中 {文本，背景，未使用但不能为空}
+  +    [SchemeInfoNorm]  = { col_gray3, col_gray1,  "#000000"  }, // infobar middle  未选中 {文本，背景，未使用但不能为空}
+  ```
+
+## columngaps
+
+https://dwm.suckless.org/patches/columngaps/
+
+- 功能简介
+
+  该补丁为column layout添加了间隙吗，如同tilegaps给tile布局添加间隙一样。该补丁内置column layout。
+
+- 使用方法
+
+  ```diff
+  +static const unsigned int gappx     = 12;       /* 间隙的大小 */
+  +	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[3]} },
+  ```
+  提供快捷键切换至column layout。
+
+## columns
+
+https://dwm.suckless.org/patches/columns/
+
+- 功能简介
+
+  提供column layout。将整个tag内的布局按列平均排布，始终有nmater+1列，最后一列与tile布局类似，是叠起来的布局。可以理解为将tile布局的master位置按列又拆了几块。
+
+- 使用方法
+
+  与columngaps相同，只是没有client之间的gap。
+
+## combo
+
+https://dwm.suckless.org/patches/combo/
+
+- 功能简介
+
+  提供“按住”而不是切换的方式同时查看多个tag，dwm默认操作是MODKEY+CTRL+(1-9)同时查看选中的tag，再按一次可以取消对某tag的选中。
+
+- 使用方法
+
+  按住MODKEY并同时按住1、3可以同时查看1、3tag中的内容。
