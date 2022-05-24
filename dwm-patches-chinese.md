@@ -133,7 +133,7 @@ https://dwm.suckless.org/patches/alwaysfullscreen/
 
 - 功能简介
 
-  当调用focusstack函数时，focus不会从fullscreen的client上移至切换的窗口。该补丁以及被写入`67d76bdc6810`版本之后的dwm，因此仅版本靠前的dwm需要此补丁。
+  当调用focusstack函数时，focus不会从fullscreen的client上移至切换的窗口。该补丁已经被写入`67d76bdc6810`版本之后的dwm，因此仅版本靠前的dwm需要此补丁。
 
 - 使用方法
 
@@ -460,15 +460,15 @@ https://dwm.suckless.org/patches/barconfig/
   ```diff
   +static const char *barlayout        = "tln|s";
   ```
-  l：布局指示，即`[]=`，`[M]`等
+  `l`：布局指示，即`[]=`，`[M]`等
 
-  n：窗口名称
+  `n`：窗口名称
 
-  s：状态栏，用`xsetroot`设置的
+  `s`：状态栏，用`xsetroot`设置的
 
-  t：标签指示，即1-9
+  `t`：标签指示，即1-9
 
-  |：分隔符，该分隔符左边的左对齐，右边的靠右对齐
+  `|`：分隔符，该分隔符左边的左对齐，右边的靠右对齐
 
 ## barpadding
 
@@ -492,7 +492,7 @@ https://dwm.suckless.org/patches/bartabgroups/
 
 - 功能简介
 
-  在tile模式下将bar上各client的标题按照左右分割进行展示，在float和monocle模式下只展示一个标题。用户自定义模式，如grid模式表现和tile类似。还增加了一个指示符用于指示该client在那些tag上出现。还可以更改tag指示的排列，如改为3x3的网格形式，不是1x9平铺。
+  在tile模式下将bar上各client的标题按照左右分割进行展示，在float和monocle模式下只展示一个标题。对于用户自定义模式，如grid模式表现和tile类似。还增加了一个指示符用于指示该client在那些tag上出现。还可以更改tag指示的排列，如改为3x3的网格形式，不是1x9平铺。
 
 - 使用方法
 
