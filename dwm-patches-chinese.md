@@ -431,3 +431,140 @@ https://dwm.suckless.org/patches/azerty/
 - 使用方法
 
   直接使用
+
+## bar height
+
+https://dwm.suckless.org/patches/bar_height/
+
+- 功能简介
+
+  更改bar的高度
+
+- 使用方法
+
+  ```diff
+  +static const int user_bh            = 0;        /* 0 means that dwm will calculate bar height, >= 1 means dwm will user_bh as bar height */
+  ```
+ 更改user_bh，0表示和之前一样，大于等于1表示按照user_bh作为bar的高度。
+
+## barconfig
+
+https://dwm.suckless.org/patches/barconfig/
+
+- 功能简介
+
+  自定义bar上各标签的位置
+
+- 使用方法
+
+  ```diff
+  +static const char *barlayout        = "tln|s";
+  ```
+  l：布局指示，即`[]=`，`[M]`等
+
+  n：窗口名称
+
+  s：状态栏，用`xsetroot`设置的
+
+  t：标签指示，即1-9
+
+  |：分隔符，该分隔符左边的左对齐，右边的靠右对齐
+
+## barpadding
+
+https://dwm.suckless.org/patches/barpadding/
+
+- 功能简介
+
+  使bar的水平和垂直方向有间隙，而不是紧贴屏幕边缘。
+
+- 使用方法
+
+  ```diff
+  +static const int vertpad            = 10;       /* vertical padding of bar */
+  +static const int sidepad            = 10;       /* horizontal padding of bar */
+  ```
+  vertpad表示垂直方向，sidepad表示水平方向。
+
+## bartabgroups
+
+https://dwm.suckless.org/patches/bartabgroups/
+
+- 功能简介
+
+  在tile模式下将bar上各client的标题按照左右分割进行展示，在float和monocle模式下只展示一个标题。用户自定义模式，如grid模式表现和tile类似。还增加了一个指示符用于指示该client在那些tag上出现。还可以更改tag指示的排列，如改为3x3的网格形式，不是1x9平铺。
+
+- 使用方法
+
+  ```diff
+  @@ -16,6 +16,8 @@ static const char *colors[][3]      = {
+ 	/*               fg         bg         border   */
+ 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+ 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+  +	[SchemeTabActive]  = { col_gray2, col_gray3,  col_gray2 },
+  +	[SchemeTabInactive]  = { col_gray1, col_gray3,  col_gray1 }
+  };
+  
+  /* tagging */
+  @@ -37,6 +39,15 @@ static const int nmaster     = 1;    /* number of clients in master area */
+  static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+  static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+  
+  +/* Bartabgroups properties */
+  +#define BARTAB_BORDERS 1       // 0 = off, 1 = on
+  +#define BARTAB_BOTTOMBORDER 1  // 0 = off, 1 = on
+  +#define BARTAB_TAGSINDICATOR 1 // 0 = off, 1 = on if >1 client/view tag, 2 = always on
+  +#define BARTAB_TAGSPX 5        // 指示tag的小格子的像素大小
+  +#define BARTAB_TAGSROWS 3      // 指示tag的小格子排多少行
+  +static void (*bartabmonfns[])(Monitor *) = { monocle /* , 与monocle类似的自定义layout */ };
+  +static void (*bartabfloatfns[])(Monitor *) = { NULL /* , 与float类似的自定义layout */ };
+  ```
+  更改以上这些定义的值可以调整该patch的效果，未设置的自定义layout应该表现都和tile类似。
+
+## bidi(Bidirectional Text)
+
+https://dwm.suckless.org/patches/bidi/
+
+- 功能简介
+
+  添加了对从右向左书写语言的支持
+
+- 使用方法
+
+  直接使用
+
+## blanktags
+
+- 功能简介
+ 
+  将tag指示变为小方块，取消了1-9的数字指示，并且不显示没有client的tag（虽然不显示，但依然占位）
+
+- 使用方法
+
+  直接使用
+
+## bottomstack
+
+https://dwm.suckless.org/patches/bottomstack/
+
+- 功能简介
+
+  增加两种布局，让新client出现在master的下面。
+
+  ```
+  bstack        (TTT)       bstackhoriz   (===)
+  +-----------------+       +-----------------+
+  |                 |       |                 |
+  |                 |       |                 |
+  |                 |       |                 |
+  +-----+-----+-----+       +-----------------+
+  |     |     |     |       +-----------------+
+  |     |     |     |       +-----------------+
+  +-----+-----+-----+       +-----------------+
+  ```
+
+- 使用方法
+
+  bstack [Alt]+[u], bstackhoriz [Alt]+[o]。
+
+## 
