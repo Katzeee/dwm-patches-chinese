@@ -17,3 +17,4 @@ The Chinese translation of DWM patches / DWM补丁的中文翻译
 - tary：系统托盘，最小化的图标显示的位置。
 - master：新创建的client会被放在左边也就使master的位置。
 - layout：窗口布局，默认有三种tile`[]=`，floating`><>`，monocle`[M]`
+- master：新创建的client会被放在左边也就是master的位置。
