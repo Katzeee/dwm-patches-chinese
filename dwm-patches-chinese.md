@@ -1059,3 +1059,312 @@ https://dwm.suckless.org/patches/cyclelayouts/
   ```
   最后一个布局需要设置为NULL, NULL，使用提供的快捷键可以在布局之间循环。
 
+## deck
+
+https://dwm.suckless.org/patches/deck/
+
+- 功能简介
+
+  提供deck布局，可以将tile右边叠起来的那部分按照monocle的布局排列，即z轴的叠加。
+
+  ```
+  Tile :
+  +-----------------+--------+
+  |                 |        |
+  |                 |  S1    |
+  |                 |        |
+  |        M        +--------+
+  |                 |        |
+  |                 |   S2   |
+  |                 |        |
+  +-----------------+--------+
+  Deck :
+  +-----------------+--------+
+  |                 |        |
+  |                 |        |
+  |                 |        |
+  |        M        |   S1   |
+  |                 |        |
+  |                 |        |
+  |                 |        |
+  +-----------------+--------+
+  ```
+
+- 使用方法
+
+  直接使用
+
+## decoration hints
+
+https://dwm.suckless.org/patches/decoration_hints/
+
+- 功能简介
+  > 让dwm尊重_MOTIF_WM_HINTS属性，不要在请求它的窗口周围画边框。一些应用程序使用此属性通知窗口管理器不要绘制窗口装饰。
+  >
+  > 不尊重这个属性会导致应用程序绘制自己的边界，如chromium(关闭“使用系统标题栏和边界”选项)或vlc在全屏模式下的问题。
+
+  我理解就是有些应用会自己绘制自己的边界，而dwm默认不让应用自己画，而是采用dwm统一的画法。
+
+- 使用方法
+
+  直接使用
+
+## default tag applications
+
+https://dwm.suckless.org/patches/default_tag_apps/
+
+- 功能简介
+
+  提供快捷键一键开启你设定好的所有窗口，我的理解是可以和rule一起用一键展开自己的workspace那种功能。
+
+- 使用方法
+
+  ```diff
+  +static const char *defaulttagapps[] = { "st", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+
+  +	{ MODKEY,                       XK_s,      spawndefault,   {0} },
+  ```
+  defaulttagapps是命令行中打开该软件的命令，默认快捷键为MODKEY+s。
+
+## defaultlayoutpermonitor
+
+https://dwm.suckless.org/patches/defaultlayoutpermonitor/
+
+- 功能简介
+
+  为每个monitor设置默认布局，每次打开dwm都是该布局。
+
+- 使用方法
+
+  ```diff
+  +static const int lpm[] = {
+  +        /* layouts数组的排列，默认0表示tile
+  +         * 1 表示float， 如果没有为每个monitor设置一个默认layout
+  +         * 则给之后的monitor设置为默认layout */
+  +        0, 1
+  +};
+  ```
+
+## defaulttransparency
+
+https://dwm.suckless.org/patches/defaulttransparency/
+
+- 功能简介
+
+  提供快捷键调整当前focus窗口的透明度。基于Stefan Mark的`transparency` patch。
+
+- 使用方法
+
+  ```diff
+  +static const double defaultopacity  = 0.75;
+
+  +	{ MODKEY|ShiftMask,		XK_s,	   spawn,	   SHCMD("transset-df -a --dec .1") },
+  +	{ MODKEY|ShiftMask,		XK_d,	   spawn,	   SHCMD("transset-df -a --inc .1") },
+  +	{ MODKEY|ShiftMask,		XK_f,	   spawn,	   SHCMD("transset-df -a .75") },
+ 	{ MODKEY,                       XK_b,      togglebar,      {0} },
+  ```
+
+  defaultopacity为默认透明度，MODKEY+SHIFT+s降低透明度，d提高，f回到默认，这里的默认和defaultopacity设置的可以不相同。
+
+## destroyfocus 
+
+https://dwm.suckless.org/patches/destroyfocus/
+
+- 功能简介
+
+  每次关闭窗口时聚焦到哪个窗口是一个问题，该补丁将聚焦到鼠标所在的窗口。dwm默认应该时聚焦到被关闭窗口的上一个窗口。
+
+- 使用方法
+
+  直接使用
+
+## dmenumatchtop
+
+https://dwm.suckless.org/patches/dmenumatchtop/
+
+- 功能简介
+
+  使dmenu出现的位置和topbar的位置符合，如果topbar在下面，则dmenu也在下面。
+
+- 使用方法
+
+  直接使用
+
+## doublepressquit
+
+https://dwm.suckless.org/patches/doublepressquit/
+
+- 功能简介
+
+  需要连续按两次退出快捷键才会退出dwm，以防按错了有数据没有保存。
+
+- 使用方法
+
+  直接使用
+
+## dragmfact
+
+https://dwm.suckless.org/patches/dragmfact/
+
+- 功能简介
+
+  可以用鼠标调整tile布局中屏幕左右分的比例。
+
+- 使用方法
+
+  按住MODKEY的同时拖动分割线即可。
+
+## dualstatus
+
+https://dwm.suckless.org/patches/dualstatus/
+
+- 功能简介
+
+  提供第二条bar，可以与原有的bar一起控制是否显示也可以分开控制。
+
+- 使用方法
+
+  可以通过`xsetroot -name "top text;bottom text"`命令去改变第二条bar的内容。
+
+  ```diff
+  +static const int extrabar           = 1;        /* 0 means no extra bar */ 
+
+  +	{ MODKEY,                       XK_b,      toggleextrabar, {0} },
+  ```
+
+  extrabar为1表示显示这条bar，如果将toggleextrabar的快捷键与tooglebar的设置相同就可以同时控制两条bar的出现与消失，也可单独设置快捷键。
+
+## dwmfifo
+
+https://dwm.suckless.org/patches/dwmfifo/
+
+- 功能简介
+
+  该补丁可以通过FIFO给dwm传指令，也就是可以通过命令行模拟dwm中的各个快捷键。可以用来自动化操作dwm。
+
+- 使用方法
+
+  通过向`/tmp/dwm.fifo`写入指令操控dwm，如
+  ```bash
+  $ echo toggleview1 # 打开tag1
+  $ sleep 0.5
+  $ echo term > /tmp/dwm.fifo # 打开terminal
+  $ sleep 0.5
+  $ echo toggleview2 # 打开tag2
+  $ sleep 0.5
+  $ echo term > /tmp/dwm.fifo # 打开terminal
+  $ sleep 0.5
+  ```
+  可以在`config.h`中查看并更改各命令。
+  ```diff
+  +static const char *dwmfifo = "/tmp/dwm.fifo";
+  +static Command commands[] = {
+  +	{ "dmenu",           spawn,          {.v = dmenucmd} },
+  +	{ "term",            spawn,          {.v = termcmd} },
+  +	{ "quit",            quit,           {0} },
+  +	{ "togglebar",       togglebar,      {0} },
+  +	{ "focusstack+",     focusstack,     {.i = +1} },
+  +	{ "focusstack-",     focusstack,     {.i = -1} },
+  +	{ "incnmaster+",     incnmaster,     {.i = +1} },
+  +	{ "incnmaster-",     incnmaster,     {.i = -1} },
+  +	{ "setmfact+",       setmfact,       {.f = +0.05} },
+  +	{ "setmfact-",       setmfact,       {.f = -0.05} },
+  +	{ "zoom",            zoom,           {0} },
+  +	{ "view",            view,           {0} },
+  +	{ "killclient",      killclient,     {0} },
+  +	{ "setlayout-tiled", setlayout,      {.v = &layouts[0]} },
+  +	{ "setlayout-float", setlayout,      {.v = &layouts[1]} },
+  +	{ "setlayout-mono",  setlayout,      {.v = &layouts[2]} },
+  +	{ "togglelayout",    setlayout,      {0} },
+  +	{ "togglefloating",  togglefloating, {0} },
+  +	{ "viewall",         view,           {.ui = ~0} },
+  +	{ "tag",             tag,            {.ui = ~0} },
+  +	{ "focusmon+",       focusmon,       {.i = +1} },
+  +	{ "focusmon-",       focusmon,       {.i = -1} },
+  +	{ "tagmon+",         tagmon,         {.i = +1} },
+  +	{ "tagmon-",         tagmon,         {.i = -1} },
+  +	{ "view1",           view,           {.ui = 1 << 0} },
+  +	{ "view2",           view,           {.ui = 1 << 1} },
+  +	{ "view3",           view,           {.ui = 1 << 2} },
+  +	{ "view4",           view,           {.ui = 1 << 3} },
+  +	{ "view5",           view,           {.ui = 1 << 4} },
+  +	{ "view6",           view,           {.ui = 1 << 5} },
+  +	{ "view7",           view,           {.ui = 1 << 6} },
+  +	{ "view8",           view,           {.ui = 1 << 7} },
+  +	{ "view9",           view,           {.ui = 1 << 8} },
+  +	{ "toggleview1",     toggleview,     {.ui = 1 << 0} },
+  +	{ "toggleview2",     toggleview,     {.ui = 1 << 1} },
+  +	{ "toggleview3",     toggleview,     {.ui = 1 << 2} },
+  +	{ "toggleview4",     toggleview,     {.ui = 1 << 3} },
+  +	{ "toggleview5",     toggleview,     {.ui = 1 << 4} },
+  +	{ "toggleview6",     toggleview,     {.ui = 1 << 5} },
+  +	{ "toggleview7",     toggleview,     {.ui = 1 << 6} },
+  +	{ "toggleview8",     toggleview,     {.ui = 1 << 7} },
+  +	{ "toggleview9",     toggleview,     {.ui = 1 << 8} },
+  +	{ "tag1",            tag,            {.ui = 1 << 0} },
+  +	{ "tag2",            tag,            {.ui = 1 << 1} },
+  +	{ "tag3",            tag,            {.ui = 1 << 2} },
+  +	{ "tag4",            tag,            {.ui = 1 << 3} },
+  +	{ "tag5",            tag,            {.ui = 1 << 4} },
+  +	{ "tag6",            tag,            {.ui = 1 << 5} },
+  +	{ "tag7",            tag,            {.ui = 1 << 6} },
+  +	{ "tag8",            tag,            {.ui = 1 << 7} },
+  +	{ "tag9",            tag,            {.ui = 1 << 8} },
+  +	{ "toggletag1",      toggletag,      {.ui = 1 << 0} },
+  +	{ "toggletag2",      toggletag,      {.ui = 1 << 1} },
+  +	{ "toggletag3",      toggletag,      {.ui = 1 << 2} },
+  +	{ "toggletag4",      toggletag,      {.ui = 1 << 3} },
+  +	{ "toggletag5",      toggletag,      {.ui = 1 << 4} },
+  +	{ "toggletag6",      toggletag,      {.ui = 1 << 5} },
+  +	{ "toggletag7",      toggletag,      {.ui = 1 << 6} },
+  +	{ "toggletag8",      toggletag,      {.ui = 1 << 7} },
+  +	{ "toggletag9",      toggletag,      {.ui = 1 << 8} },
+  +};
+  ```
+
+## dynamicscratchpads
+
+https://dwm.suckless.org/patches/dynamicscratchpads/
+
+- 功能简介
+
+  scratchpad可以理解为一个不属于任何tag的window，你可以在任何一个tag将其呼出，以float的形式存在，该补丁提供一个scratchpad，你可以将选中的window移至或移出scratchpad。也可以添加rule默认从scratchpad启动。若多个client在scratchpad中，它们将被轮询显示而不是同时。
+
+- 使用方法
+
+  ```diff
+  +	{ MODKEY,                       XK_minus, scratchpad_show, {0} },
+  +	{ MODKEY|ShiftMask,             XK_minus, scratchpad_hide, {0} },
+  +	{ MODKEY,                       XK_equal,scratchpad_remove,{0} },
+  ```
+  没整明白，待补充。
+
+## dynamicswallow(Dynamic, Command-Line Driven Window Swallowing for dwm)
+
+https://dwm.suckless.org/patches/dynamicswallow/
+
+- 功能介绍
+
+  这个补丁引入了“动态”窗口吞入dwm。与现有(“静态”)`swallow`补丁的机制相比，动态窗口吞下是运行时可配置的，并且可以通过dwmswallow(该补丁包含的命令行工具)完全编写脚本。
+
+  swallow指当你打开一个窗口时，新窗口会取代旧窗口的位置，旧窗口会被隐藏，而不是在master位置打开新窗口。你可以在dwm运行时设置哪些窗口作为swllower（可以吞并其他窗口的client）。
+
+- 使用方法
+
+  - `dwmswallow SWALLOWER [-c CLASS] [-i INSTANCE] [-t TITLE]`注册swallower
+
+    如`dwmswallow $WINDOWID -c Google-chrome`可以将chrome注册为swalloer，每次打开chrome都将吞掉打开他的哪个client。
+
+  - `MOD+SHIFT+鼠标左键`拖动也可以进行swallow。
+
+  - 更多的帮助可以通过`dwmswallow -h`获得，也可将其写入`.bashrc`作为alias使用。
+
+## emptyview
+
+
+
+
+
+
+
+
