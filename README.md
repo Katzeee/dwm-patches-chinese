@@ -14,7 +14,7 @@ The Chinese translation of DWM patches / DWM补丁的中文翻译
 - client：每一个tag上的一个任务界面是一个client，比如在tag1打开两个st，则每一个st的界面被称为一个client。
 - focus：目前可以进行操作的client就是被focus的，也就是聚焦。
 - vaccant：空闲的，一个没有client的tag就是一个vaccant tag。
-- tary：系统托盘，最小化的图标显示的位置。
+- tray：系统托盘，最小化的图标显示的位置。
 - layout：窗口布局，默认有三种tile`[]=`，floating`><>`，monocle`[M]`
 - master：新创建的client会被放在左边也就是master的位置。master位置可以有n个client，通过更改`config.h`中的`nmaster`来改变，默认为1。
 - rule：对某特定窗口的规则，比如设置chrome每次打开都在tag2，且为floating窗口
