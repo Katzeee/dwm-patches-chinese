@@ -21,6 +21,8 @@ https://dwm.suckless.org/patches/activetagindicatorbar/
 
 - 功能简介
 
+    ![](./images/activetagindicatorbar.png)
+
   此补丁将指示Client是否被使用的矩形标记更改为tag数字上方的条状标记。使用时需注意tag的字体在顶部留出足够的空间。 
 
 - 使用方法
@@ -68,6 +70,8 @@ https://dwm.suckless.org/patches/alpha/
 
 - 功能简介
 
+  ![](./images/dwm-alpha.png)
+  
   透明的bar
 
 - 使用方法
@@ -81,6 +85,8 @@ https://dwm.suckless.org/patches/alternativetags/
 - 功能简介
 
   允许在运行过程中更改bar上各tag的标识符，不用的时候可以为设置好的图案，切换时可以换回数字更快操作，但只能设置两组进行切换。
+
+
 
 - 使用方法
 
