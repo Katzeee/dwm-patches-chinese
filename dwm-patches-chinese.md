@@ -1336,6 +1336,8 @@ https://dwm.suckless.org/patches/dynamicscratchpads/
 
   scratchpad可以理解为一个不属于任何tag的window，你可以在任何一个tag将其呼出，以float的形式存在，该补丁提供一个scratchpad，你可以将选中的window移至或移出scratchpad。也可以添加rule默认从scratchpad启动。若多个client在scratchpad中，它们将被轮询显示而不是同时。
 
+  ![](./images/dynamicscratchpads.png)
+
 - 使用方法
 
   ```diff
@@ -1343,8 +1345,7 @@ https://dwm.suckless.org/patches/dynamicscratchpads/
   +	{ MODKEY|ShiftMask,             XK_minus, scratchpad_hide, {0} },
   +	{ MODKEY,                       XK_equal,scratchpad_remove,{0} },
   ```
-  没整明白，待补充。
-
+  
 ## dynamicswallow(Dynamic, Command-Line Driven Window Swallowing for dwm)
 
 https://dwm.suckless.org/patches/dynamicswallow/
@@ -1367,7 +1368,120 @@ https://dwm.suckless.org/patches/dynamicswallow/
 
 ## emptyview
 
+https://dwm.suckless.org/patches/emptyview/
 
+- 功能简介
+
+  该patch可以使dwm在打开时不选中任何tag（默认情况会选中tag1），据作者介绍是因为他喜欢他的壁纸。
+
+  ![](./images/emptyview.png)
+
+- 使用方法
+
+  可以在`config.h`中查看并更。
+  ```diff
+  +static const int startontag         = 1;        /* 指定默认打开的tag，0表示不打开任何tag */
+  ```
+
+## environment variables
+
+https://dwm.suckless.org/patches/environmentvars/
+
+- 功能简介
+
+  使用`getenv`函数获取环境变量中指定的terminal，以此可以通过更改环境变量的方式更改dwm中所指定的terminal，而不用重新编译dwm，可以一会使用`st`一会使用`alacritty`或其他的terminal而不用重新编译dwm。
+
+- 使用方法
+
+  打上补丁之后可以通过修改环境变量的方法更改所需要使用的terminal，如：
+  ```bash
+  $ export TERMINAL="$(which st)"
+  ````
+
+## ewmhtags
+
+https://dwm.suckless.org/patches/ewmhtags/
+
+- 功能简介
+
+  该补丁是`current desktop`的补丁和更新，为其增加了EWMH（扩展窗口管理器）支持，有关EWMH的相关可以在[EWMH Wekipedia](http://en.volupedia.org/wiki/Extended_Window_Manager_Hints)上得到更详细的解释。据我理解依然是为了使作者实现的各个脚本可以直接和Xserver通信，在Wikipedia上可以看到：
+  > These standards formulate protocols for the mediation of access to shared X resources, like the screen and the input focus.
+
+- 使用方法
+
+  直接使用
+
+## exresize
+
+https://dwm.suckless.org/patches/exresize/
+
+- 功能简介
+
+  该脚本提供仅用键盘的方式对floating窗口进行布局和大小的调整。该脚本受`maximize`和`moveresize`启发，且包含了`save float`的功能。
+
+- 使用方法
+
+  ```diff
+  +	{ MODKEY,                       XK_KP_7,   explace,                {.ui = EX_NW }},
+  +	{ MODKEY,                       XK_KP_8,   explace,                {.ui = EX_N  }},
+  +	{ MODKEY,                       XK_KP_9,   explace,                {.ui = EX_NE }},
+  +	{ MODKEY,                       XK_KP_4,   explace,                {.ui = EX_W  }},
+  +	{ MODKEY,                       XK_KP_5,   explace,                {.ui = EX_C  }},
+  +	{ MODKEY,                       XK_KP_6,   explace,                {.ui = EX_E  }},
+  +	{ MODKEY,                       XK_KP_1,   explace,                {.ui = EX_SW }},
+  +	{ MODKEY,                       XK_KP_2,   explace,                {.ui = EX_S  }},
+  +	{ MODKEY,                       XK_KP_3,   explace,                {.ui = EX_SE }},
+  +
+  +	{ MODKEY|ShiftMask,             XK_KP_8,   exresize,               {.v = (int []){   0,  25 }}},
+  +	{ MODKEY|ShiftMask,             XK_KP_2,   exresize,               {.v = (int []){   0, -25 }}},
+  +	{ MODKEY|ShiftMask,             XK_KP_6,   exresize,               {.v = (int []){  25,   0 }}},
+  +	{ MODKEY|ShiftMask,             XK_KP_4,   exresize,               {.v = (int []){ -25,   0 }}},
+  +	{ MODKEY|ShiftMask,             XK_KP_5,   exresize,               {.v = (int []){  25,  25 }}},
+  +	{ MODKEY|ShiftMask|ControlMask, XK_KP_5,   exresize,               {.v = (int []){ -25, -25 }}},
+  +
+  +	{ MODKEY|ControlMask,           XK_KP_6,   togglehorizontalexpand, {.i = +1} },
+  +	{ MODKEY|ControlMask,           XK_KP_3,   togglehorizontalexpand, {.i =  0} },
+  +	{ MODKEY|ControlMask,           XK_KP_4,   togglehorizontalexpand, {.i = -1} },
+  +	{ MODKEY|ControlMask,           XK_KP_8,   toggleverticalexpand,   {.i = +1} },
+  +	{ MODKEY|ControlMask,           XK_KP_1,   toggleverticalexpand,   {.i =  0} },
+  +	{ MODKEY|ControlMask,           XK_KP_2,   toggleverticalexpand,   {.i = -1} },
+  +	{ MODKEY|ControlMask,           XK_KP_9,   togglemaximize,         {.i = -1} },
+  +	{ MODKEY|ControlMask,           XK_KP_7,   togglemaximize,         {.i = +1} },
+  +	{ MODKEY|ControlMask,           XK_KP_5,   togglemaximize,         {.i =  0} },
+  };
+  ```
+  
+  XK_KP指的应该是小键盘区的数字键（未查证），因电脑上没有小键盘区，我将其改成字母键，该patch可正常运作，功能丰富，不在此一一介绍，分别就是对窗口的长宽调节，移动等等。
+
+## extrabar
+
+https://dwm.suckless.org/patches/extrabar/
+
+- 功能简介
+
+  该patch提供了一个额外的status bar，和`dualstatus`补丁的效果很相似，默认bar在上他就在下，反之亦然。
+  自从`20210930-a786211 version`之后支持在左右分别设置状态。
+  在extarbar上共有三个点击区域，可以理解为隐形按钮，分别在左边状态上，中间，右边状态上，触发的效果可以在`config.h`中设置。
+
+- 使用方法
+
+  类似于对默认bar的设置，用两个分号隔开，从左到右分别是“默认statusbar;extrabar的左半部分;extrabar的右半部分”，如果有不需要设置的可以空着，如`;;`表示全部空着。
+  ```bash
+  $ xsetroot -name "standard status text;extra bar left status text;extra bar right status text"
+  ```
+
+  ```diff
+  + static const int showbar            = 1;        /* 0 表示无默认状态栏 */
+  + static const int topbar             = 1;        /* 0 表示默认状态栏在底部 */
+  + static const int extrabar           = 1;        /* 0 表示没有extrabar */
+  + static const char statussep         = ';';      /* 使用xsetroot时的分隔符 */
+  // 打开或关闭extrabar
+  +	{ MODKEY|ShiftMask,             XK_b,      toggleextrabar, {0} },
+  // 以下的三条可以设置extarbar上隐形按钮的效果
+  +	{ ClkExBarLeftStatus,   0,              Button2,        spawn,          {.v = termcmd } },
+  +	{ ClkExBarMiddle,       0,              Button2,        spawn,          {.v = termcmd } },
+  +	{ ClkExBarRightStatus,  0,              Button2,        spawn,          {.v = termcmd } },
+  ```
 
 
 
