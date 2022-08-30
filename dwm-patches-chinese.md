@@ -425,6 +425,8 @@ https://dwm.suckless.org/patches/awesomebar/
   // config.h
   { MODKEY|ShiftMask,             XK_s,      showall,        {0} },
   ```
+  
+  Update: 现在可以在我的仓库里找的适配6.3版本的patch，相关文件已提交dwm wiki
 
 ## azerty
 
