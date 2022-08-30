@@ -1483,8 +1483,408 @@ https://dwm.suckless.org/patches/extrabar/
   +	{ ClkExBarRightStatus,  0,              Button2,        spawn,          {.v = termcmd } },
   ```
 
+## fadeinactive
+
+https://dwm.suckless.org/patches/fadeinactive/
+
+- 功能简介
+
+  改变非focus窗口透明度，该patch受`clientopacity`启发。
+
+- 使用方法
+
+  ```diff
+  +static const double activeopacity   = 1.0f;     /* 被focus时的透明度 (0 <= opacity <= 1) */
+  +static const double inactiveopacity = 0.875f;   /* 不被focus时的透明度 (0 <= opacity <= 1) */
+  +static       Bool bUseOpacity       = True;     /* Starts with opacity on any unfocused windows */
+  ```
+  TODO: Test and update
+  该patch在我的虚拟机上测试并没有生效，因此没有测试第三个bool变量的效果。
+
+## fakefullscreen
+
+https://dwm.suckless.org/patches/fakefullscreen/
+
+- 功能简介
+
+  仅允许窗口在给定的区域内全屏，可理解为看视频时的网页全屏，比如在一个tag里开了两个b站看视频，可以将两个都全屏，他们全屏的位置只在他们当前的窗口内，而不是整个屏幕。
+
+  ![](images/fakefullscreen.png)
+
+- 使用方法
+
+  直接使用
+
+## fancybar
+
+https://dwm.suckless.org/patches/fancybar/
+
+- 功能简介
+
+  该patch可以在bar上显示出该tag内所有窗口的名称而不是仅显示被选中的那个，算是awesomebar的一个功能弱化版。
+
+- 使用方法 
+
+  直接使用
+
+## fibonacci
+
+https://dwm.suckless.org/patches/fibonacci/
+
+- 功能简介
+
+  该patch提供两个新的窗口布局（spiral和dwindle）按照斐波那契的平铺方式：后一个窗口占用前一个一半的长或宽。
+
+  ```
+  +-----------+-----------+  +-----------+-----------+
+  |           |           |  |           |           |
+  |           |     2     |  |           |     2     |
+  |           |           |  |           |           |
+  |     1     +--+--+-----+  |     1     +-----+-----+
+  |           | 5|-.|     |  |           |     |  4  |
+  |           +--+--+  3  |  |           |  3  +--+--+
+  |           |  4  |     |  |           |     | 5|-.|
+  +-----------+-----+-----+  +-----------+-----+-----+
+            spiral                     dwindle
+  ```
+
+- 使用方法
+
+  ```diff
+  +	{ MODKEY,                       XK_r,      setlayout,      {.v = &layouts[3]} },
+  +	{ MODKEY|ShiftMask,             XK_r,      setlayout,      {.v = &layouts[4]} },
+  ```
+
+  默认快捷键为MODKEY+r和MODKEY+SHIFT+r
+
+## flextile
+
+https://dwm.suckless.org/patches/flextile/
+
+- 功能简介
+
+  该patch提供了一种更为灵活的tile模式去代替原有的tile。
+
+  * 与默认tile完全相同的功能
+  * 左/右/上/下按照n-master（n个主窗口）的形式tile或monocle，对应的一边（stack）按照monocle的方式堆叠
+  * 对每一个tag分别调节
+  
+  该patch是以下patches的合并和拓展：
+
+  * bottom stack (bstack and bstackhoriz)
+  * nmaster
+  * pertag
+
+- 使用方法
+
+  默认打上补丁后和原tile布局功能相同，可以修改以下的配置
+
+  ```diff
+  +static const int layoutaxis[] = {
+  +	1,    /* 分块布局: 1 = 左（主）右, 2 = 上下; 负值表示将master区域颠倒，-1=右（主）左  */
+  +	2,    /* master内部布局: 1 = 从左到右, 2 = 从上到下, 3 = monocle */
+  +	2,    /* stack内部布局:  1 = 从左到右, 2 = 从上到下, 3 = monocle */
+  +};
+  // i，d快捷键和原来功能相同
+  +	{ MODKEY,                       XK_i,      shiftmastersplit, {.i = +1} },   /* 增加master区域clients数量 */
+  +	{ MODKEY,                       XK_d,      shiftmastersplit, {.i = -1} },   /* 减少master区域clients数量 */
+  +	{ MODKEY|ControlMask,           XK_t,      rotatelayoutaxis, {.i = 0} },    /* 更改分块布局 */
+  +	{ MODKEY|ControlMask,           XK_Tab,    rotatelayoutaxis, {.i = 1} },    /*  更改master布局 */
+  +	{ MODKEY|ControlMask|ShiftMask, XK_Tab,    rotatelayoutaxis, {.i = 2} },    /*  更改stack布局 */
+  +	{ MODKEY|ControlMask,           XK_Return, mirrorlayout,     {0} },
+  ```
+
+## float border color
+
+https://dwm.suckless.org/patches/float_border_color/
+
+- 功能简介
+
+  可以为floating窗口的边界更换颜色
+
+- 使用方法
+
+  第四个参数为float窗口的边界颜色
+  ```diff
+  +static const char *colors[][4]      = {
+  +	/*               fg         bg         border     float */
+  +	[SchemeNorm] = { col_gray3, col_gray1, col_gray2, col_gray2 },
+  +	[SchemeSel] =  { col_gray4, col_cyan,  col_gray2, col_cyan },
+  ```
+
+## floatborderwidth
+
+https://dwm.suckless.org/patches/floatborderwidth/
+
+- 功能简介
+
+  可以为floating窗口和tile窗口分别设置边界宽度。
+
+- 使用方法
+
+  ```diff
+  +static const unsigned int borderpx  = 0;        /* 正常窗口的边界宽度 */
+  +static const unsigned int fborderpx = 1;        /* floating 窗口的边界宽度 */
+  ```
+
+## floatrules
+
+https://dwm.suckless.org/patches/floatrules/
+
+- 功能简介
+
+  提供了5个新的变量用于指定isfloating为1的窗口的默认呼出属性：
+  * floatx, floaty, floatw, floath 分别表示横坐标位置，纵坐标位置，窗口宽度，窗口高度
+  * floatborderpx 浮动窗口的边界宽度，设为-1则所有属性默认
+
+  ![](images/floatrules.png)
+
+- 使用方法
+
+  ```diff
+  +	/* class      instance    title       tags mask     isfloating   monitor    float x,y,w,h         floatborderpx*/
+  +	{ "Gimp",     NULL,       NULL,       0,            1,           -1,        50,50,500,500,        5 },
+  +	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1,        50,50,500,500,        5 },
+  ```
+
+  修改rules里面的值即可
+
+## focus adjacent tag
+
+https://dwm.suckless.org/patches/focusadjacenttag/
+
+- 功能简介
+
+  提供键盘快捷键快速focus左边或右边相邻的tags
+
+- 使用方法
+
+  ```diff
+  +	{ MODKEY,                       XK_Left,   viewtoleft,     {0} }, // focus到左边的tag
+  +	{ MODKEY,                       XK_Right,  viewtoright,    {0} }, // focus到右边的tag
+  +	{ MODKEY|ShiftMask,             XK_Left,   tagtoleft,      {0} }, // 将当前focus的窗口送到左边的tag
+  +	{ MODKEY|ShiftMask,             XK_Right,  tagtoright,     {0} }, // 将当前focus的窗口送到右边的tag
+  ```
+
+## focus fullscreen
+
+https://dwm.suckless.org/patches/focusfullscreen/
+
+- 功能简介
+
+  默认情况会自动focus在全屏窗口上，该patch可以使你循环focus不同的client而并非全屏窗口，并向monocle一样创建新全屏窗口（可以理解为无边框窗口化按照monocle模式堆叠，比如打lol同时打dota）
+
+- 使用方法
+
+  ```diff
+  +	{ MODKEY,						XK_f,	   togglefullscreen, {0} }, // 打开/关闭全屏显示
+  ```
+
+## focusmaster
+
+https://dwm.suckless.org/patches/focusmaster/
+
+- 功能简介
+
+  可以使用快捷键focus到master窗口上
+
+- 使用方法
+
+  ```diff
+  + { MODKEY|ControlMask,           XK_space,  focusmaster,    {0} },
+  ```
+  使用快捷键MODKEY+CTRL+space进行focus
+
+## focusmonmouse
+
+https://dwm.suckless.org/patches/focusmonmouse/
+
+- 功能简介
+
+  适用于多monitor，默认在切换显示器focus时不会移动鼠标到该显示器上，该补丁使鼠标也会一并移入。
+
+- 使用方法
+
+  直接使用
+
+## focusonclick
+
+https://dwm.suckless.org/patches/focusonclick/
+
+- 功能简介
+
+  默认dwm会根据鼠标在那一个client上直接focus，该patch强迫点击之后才会focus而不是移动过去直接focus
+
+- 使用方法
+
+  直接使用
+
+## focusonnetactive
+
+https://dwm.suckless.org/patches/focusonnetactive/
+
+- 功能简介
+
+  dwm底层逻辑的更改，与X server交互相关。默认dwm将通过设置urgency bit的方式回应`_NET_ACTIVE_WINDOW`信息。该patch改为直接activate该window，两种方式都是可取的。
+
+  以下为`_NET_ACTIVE_WINDOWD`的manual
+  > _NET_ACTIVE_WINDOW
+  >
+  > _NET_ACTIVE_WINDOW, WINDOW/32
+  > 
+  > The window ID of the currently active window or None if no window has the focus. This is a read-only property set by the Window Manager. If a Client wants to activate another window, it MUST send a _NET_ACTIVE_WINDOW client message to the root window:
+
+  TODO: 这句话没读懂
+  > One should decide which of these one should perform based on the message senders' untestable claims that it represents the end-user. 
+
+  可能是说用户应根据使用场景决定使用哪种模式。作者认为设置urgency bit是一种保守的方式，而该补丁将其改为了一种更值得信任的方式。
+
+  且该补丁使得dwm可以使用`wmctrl -a`指令和其他外部的窗口管理工具。
+
+- 使用方法
+
+  直接使用
+
+## focusurgent
+
+https://dwm.suckless.org/patches/focusurgent/
+
+- 功能简介
+
+  focus到下一个设置了urgent flag（紧急标志位，不论该窗口在哪个tag
+
+  urgent flag可以按以下方式设置
+  ```bash
+  $ xdotool selectwindow -- set_window --urgency 1
+  ```
+
+- 使用方法
+
+  可用于某些特殊场景，如自己设置的某些script，作者并未给出使用场景。
+
+## freespace
+
+https://dwm.suckless.org/patches/freespace/
+
+- 功能简介
+
+  设置了新变量panel[4]用于指定窗口四周padding的大小
+
+  ```
+  +----------------+-+
+  | |   panel[0]   | |
+  +-+--------------+-+
+  | |              | |
+  |2|              |3|
+  | |              | |
+  +-+--------------+-+
+  | |   panel[1]   | |
+  +----------------+-+
+  ```
+
+  在tile和monocle布局下，这些free space就是这些窗口的边界，在floating布局下，窗口可以贴附到这些边界上。
+
+  有一个bug：当只有一个master窗口的时候，若panel2设置为了非0值，则有边界会超出屏幕。
+
+- 使用方法
+
+  ```diff
+  +static const unsigned int panel[] = {30, 0, 0, 0};// 分别为0，1，2，3panel的大小
+  ```
+
+## fsignal
+
+https://dwm.suckless.org/patches/fsignal/
+
+- 功能简介
+
+  使用xsetroot发送“假信号”给dwm处理，该信号不会与设置statusbar冲突。该信号可以理解为其他应用与dwm进行通信的一种方式。
+
+- 使用方式
+
+  作者给出了一个使用示例：
+
+  信号可以按照这样的方式被发送：
+
+  ```bash
+  $ xsetroot -name "fsignal:1"
+  ```
+
+  而使dwm处理该信号的方式便是在signal数组中设置，设置方法类似于快捷键：
+
+  ```c
+  static Signal signals[] = {
+	/* signum               function        argument*/
+	{ 1,                    setlayout,      {.v = 0} },
+	...
+  };
+  ```
+
+  该patch可用于dwm与script或其他应用交互，如让dmenu和dwm进行交互：
+
+  ```bash
+  #!/bin/bash
+  layouts="echo -e tiled\ncolumns\n..."
+  layout=$($layouts | dmenu "$@")
+  
+  if [[ "$layout" == "tiled" ]];then xsetroot -name "fsignal:1"; fi
+  ```
+
+## fullgaps
+
+https://dwm.suckless.org/patches/fullgaps/
+
+- 功能简介
+
+  该patch提供和gaps相似的功能，但更加丰富。
+
+  * 提供clients之间的gap，使其不相连，提供clents和屏幕边界的gap，提供master区域与stack区域的gap
+  * 提供在运行时更改gap大小的快捷键
+
+- 使用方式
+
+  ```diff
+  +static const unsigned int gappx     = 5;        /* clients之间的gap */
+  +	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
+  +	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
+  +	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
+  ```
+  
+  MODKEY+减号降低gap，MODKEY+加号增加gap，MODKEY+等号将gap设置为0。
+
+## fullscreen
+
+https://dwm.suckless.org/patches/fullscreen/
+
+- 功能简介
+
+  模拟全屏，按下快捷键时将变为monocle布局并隐藏bar，再按一次就变回来。
+
+- 使用方法
+
+  ```diff
+  +	{ MODKEY|ShiftMask,             XK_f,      fullscreen,     {0} },
+  ```
+  MODKEY+SHIFT+F可以开关fullscreen
+
+## fuctionalgaps
+
+https://dwm.suckless.org/patches/functionalgaps/
+
+- 功能简介
+  该patch是`fullgaps`,`singularborders`,`noborder`的结合体。它被命名为`functionalgapsh`是因为gaps是纯粹的美学（purely aesthetic）。且该patch有集成了pertag的版本，也就使得gaps可以在每个tag上以不同的参数配置。
 
 
+- 使用方法
 
+  ```diff
+  +static const int startwithgaps	     = 0;	 /* 1 表示默认使用gap */
+  +static const unsigned int gappx     = 10;       /* 默认gap大小 */
+  +	{ MODKEY,                       XK_minus,  setgaps,        {.i = -5 } },
+  +	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
+  +	{ MODKEY|ShiftMask,             XK_minus,  setgaps,        {.i = GAP_RESET } },
+  +	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
+  ```
 
+  默认情况下和fullgap的使用方法相同，MODKEY+SHIFT+[=]打开或关闭gap, 通过MODKEY+[+] / MODKEY+[-]设定gap大小，通过MODKEY+SHIFT+[-]重置
 

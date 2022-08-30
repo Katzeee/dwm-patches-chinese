@@ -11,7 +11,7 @@ The Chinese translation of DWM patches / DWM补丁的中文翻译
 - monitor：显示器，针对多显示器用户，外接显示器用户。
 - tag：最初页面上出现的1-9个界面每一个都是一个tag。
 - bar：显示tag和状态栏的最上面的条。
-- client：每一个tag上的一个任务界面是一个client，比如在tag1打开两个st，则每一个st的界面被称为一个client。
+- client：每一个tag上的一个任务界面是一个client，比如在tag1打开两个st，则每一个st被称为一个client，client所在的位置是一个window，可以粗略的将window和client理解为同一个东西。
 - focus：目前可以进行操作的client就是被focus的，也就是聚焦。
 - vaccant：空闲的，一个没有client的tag就是一个vaccant tag。
 - tray：系统托盘，最小化的图标显示的位置。
