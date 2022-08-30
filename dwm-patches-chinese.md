@@ -382,6 +382,8 @@ https://dwm.suckless.org/patches/awesomebar/
 
   MODKEY+j和MODKEY+k现在用于循环访问非隐藏窗口，MODKEY+SHIFT可以循环访问所有窗口，包括隐藏窗口。MODKEY+h和s用于隐藏和显示当前focus的窗口。
    
+  Update: 现在可以在我的仓库里找的适配6.3版本的patch，相关文件已提交dwm wiki
+   
   在打补丁时我发现可能因为该patch基于较为古老的dwm所写，新的dwm中focusstack的代码进行了改进
 
   因此对于diff文件中的
