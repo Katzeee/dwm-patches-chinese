@@ -1,4 +1,7 @@
 # dwm-patches-chinese
+
+淡出dwm了，再加上这几年ai已经足够好用了，可能不太需要我手动翻译了，archive了
+
 The Chinese translation of DWM patches / DWM补丁的中文翻译
 
 最近入坑Arch，了解到Window Manager的概念，从此展开了对dwm的探索。
